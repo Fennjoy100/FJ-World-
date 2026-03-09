@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Configure Tailwind v4 to use the .dark class for dark mode instead of system preference */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply antialiased text-black bg-white dark:text-white dark:bg-[#0a0a0a] transition-colors duration-300;
+  }
+  
+  * {
+    @apply border-black/5 dark:border-white/10;
+  }
+}
