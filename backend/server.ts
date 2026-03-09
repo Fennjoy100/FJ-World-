@@ -208,6 +208,7 @@ async function startServer() {
       server: { middlewareMode: true },
       appType: "spa",
       root: path.join(__dirname, "..", "frontend"),
+      configFile: path.join(__dirname, "..", "vite.config.ts"),
     });
     app.use(vite.middlewares);
   } else {
