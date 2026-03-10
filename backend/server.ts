@@ -78,46 +78,64 @@ db.exec(`
 
 // Seed initial data if empty
 const userCount = db.prepare("SELECT count(*) as count FROM users").get() as { count: number };
-if (userCount.count === 0) {
-  const hashedPassword = bcrypt.hashSync("admin123", 10);
-  db.prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)").run(
-    "Admin User",
-    "admin@fjworld.com",
-    hashedPassword,
-    "admin"
-  );
+const categoryCount = db.prepare("SELECT count(*) as count FROM categories").get() as { count: number };
 
-  const categories = ["Electronics", "Fashion", "Home & Garden", "Sports"];
-  const insertCategory = db.prepare("INSERT INTO categories (name, image) VALUES (?, ?)");
-  categories.forEach(cat => {
-    insertCategory.run(cat, `https://picsum.photos/seed/${cat.toLowerCase()}/400/400`);
-  });
+if (userCount.count === 0 || categoryCount.count === 0) {
+  if (userCount.count === 0) {
+    const hashedPassword = bcrypt.hashSync("admin123", 10);
+    db.prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)").run(
+      "Admin User",
+      "admin@fennjoy.com",
+      hashedPassword,
+      "admin"
+    );
+  }
+
+  if (categoryCount.count === 0) {
+    const categories = [
+      { name: "Electronics", image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1000&auto=format&fit=crop" },
+      { name: "Fashion", image: "https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=1000&auto=format&fit=crop" },
+      { name: "gym", image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1000&auto=format&fit=crop" },
+      { name: "food", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop" }
+    ];
+    const insertCategory = db.prepare("INSERT OR IGNORE INTO categories (name, image) VALUES (?, ?)");
+    categories.forEach(cat => {
+      insertCategory.run(cat.name, cat.image);
+    });
+  } else {
+    // Force update images for existing categories to ensure they work
+    const updateCategory = db.prepare("UPDATE categories SET image = ? WHERE name = ?");
+    updateCategory.run("https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=1000&auto=format&fit=crop", "Fashion");
+    updateCategory.run("https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1000&auto=format&fit=crop", "Electronics");
+    updateCategory.run("https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1000&auto=format&fit=crop", "gym");
+    updateCategory.run("https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop", "food");
+  }
 
   const insertProduct = db.prepare("INSERT INTO products (name, description, price, image, category_id, stock, rating) VALUES (?, ?, ?, ?, ?, ?, ?)");
-  insertProduct.run("Premium Wireless Headphones", "High-quality sound with noise cancellation.", 199.99, "https://picsum.photos/seed/headphones/600/600", 1, 50, 4.5);
-  insertProduct.run("Modern Smart Watch", "Track your fitness and stay connected.", 149.99, "https://picsum.photos/seed/watch/600/600", 1, 30, 4.2);
-  insertProduct.run("Classic Leather Jacket", "Timeless style for any occasion.", 89.99, "https://picsum.photos/seed/jacket/600/600", 2, 20, 4.8);
-  insertProduct.run("Ergonomic Office Chair", "Work in comfort with adjustable support.", 249.99, "https://picsum.photos/seed/chair/600/600", 3, 15, 4.6);
+  insertProduct.run("Headphones", "Bespoke sound engineering with premium leather finishes.", 299.99, "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=1000&auto=format&fit=crop", 1, 50, 4.9);
+  insertProduct.run("Smart Watch", "Elegant design meets cutting-edge health tracking.", 349.99, "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop", 1, 30, 4.8);
+  insertProduct.run("T shirt", "Premium cotton blend for everyday comfort and style.", 29.99, "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop", 2, 20, 4.9);
+  insertProduct.run("dumbbells", "Professional-grade adjustable dumbbells for your home gym.", 199.99, "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop", 3, 15, 4.7);
   
-  // Add Sports Products
-  insertProduct.run("Performance Running Shoes", "Lightweight and breathable for maximum speed.", 129.99, "https://picsum.photos/seed/runningshoes/600/600", 4, 40, 4.7);
-  insertProduct.run("Professional Yoga Mat", "Non-slip surface for perfect balance.", 49.99, "https://picsum.photos/seed/yogamat/600/600", 4, 100, 4.9);
-  insertProduct.run("Adjustable Dumbbell Set", "Versatile weight training for home workouts.", 299.99, "https://picsum.photos/seed/dumbbells/600/600", 4, 10, 4.4);
+  // Add food Products
+  insertProduct.run("Watermelon", "Sweet, juicy seedless watermelon, perfect for a refreshing snack.", 5.99, "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1000&auto=format&fit=crop", 4, 40, 4.8);
+  insertProduct.run("Pizza", "Delicious wood-fired pizza with fresh mozzarella and basil.", 12.99, "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop", 4, 100, 4.9);
+  insertProduct.run("Dark Chocolate", "Premium 85% cocoa crafted by master chocolatiers.", 6.99, "https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=1000&auto=format&fit=crop", 4, 10, 4.6);
 }
 
-// Ensure sports products exist even if DB was already seeded
-const sportsProductCount = db.prepare("SELECT count(*) as count FROM products WHERE category_id = 4").get() as { count: number };
-if (sportsProductCount.count === 0) {
+// Ensure food products exist even if DB was already seeded
+const foodProductCount = db.prepare("SELECT count(*) as count FROM products WHERE category_id = 4").get() as { count: number };
+if (foodProductCount.count === 0) {
   const insertProduct = db.prepare("INSERT INTO products (name, description, price, image, category_id, stock, rating) VALUES (?, ?, ?, ?, ?, ?, ?)");
-  insertProduct.run("Performance Running Shoes", "Lightweight and breathable for maximum speed.", 129.99, "https://picsum.photos/seed/runningshoes/600/600", 4, 40, 4.7);
-  insertProduct.run("Professional Yoga Mat", "Non-slip surface for perfect balance.", 49.99, "https://picsum.photos/seed/yogamat/600/600", 4, 100, 4.9);
-  insertProduct.run("Adjustable Dumbbell Set", "Versatile weight training for home workouts.", 299.99, "https://picsum.photos/seed/dumbbells/600/600", 4, 10, 4.4);
+  insertProduct.run("Watermelon", "Sweet, juicy seedless watermelon, perfect for a refreshing snack.", 5.99, "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1000&auto=format&fit=crop", 4, 40, 4.8);
+  insertProduct.run("Pizza", "Delicious wood-fired pizza with fresh mozzarella and basil.", 12.99, "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop", 4, 100, 4.9);
+  insertProduct.run("Dark Chocolate", "Premium 85% cocoa crafted by master chocolatiers.", 6.99, "https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=1000&auto=format&fit=crop", 4, 10, 4.6);
 }
 
 export const app = express();
 app.use(express.json());
 
-const JWT_SECRET = process.env.JWT_SECRET || "fjworld_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET || "fennjoy_secret_key";
 
 // Auth Middleware
 const authenticate = (req: any, res: any, next: any) => {

@@ -25,10 +25,10 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-              <span className="text-white dark:text-black font-bold text-xl">F</span>
+            <div className="w-10 h-10 bg-black dark:bg-white rounded-xl flex items-center justify-center">
+              <span className="text-white dark:text-black font-bold text-lg">FJ</span>
             </div>
-            <span className="text-xl font-bold tracking-tight dark:text-white">FJ World</span>
+            <span className="text-xl font-bold tracking-tight dark:text-white">Fenn Joy</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
@@ -133,7 +133,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t border-black/5 dark:border-white/10 pt-8 text-center">
-        <p className="text-xs text-gray-400 dark:text-gray-500">&copy; {new Date().getFullYear()} FJ World. All rights reserved.</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">&copy; {new Date().getFullYear()} Fenn Joy. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -161,10 +161,10 @@ const Home = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-6 dark:text-white">
-              ELEVATE YOUR <br /> <span className="text-gray-400">LIFESTYLE.</span>
+              CURATE YOUR <br /> <span className="text-gray-400">JOY.</span>
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md">
-              Discover a curated collection of premium essentials designed for the modern world. Quality meets timeless design.
+              Discover a curated collection of premium essentials designed for the modern world. Quality meets timeless design, curated by Fenn Joy.
             </p>
             <Link to="/products" className="inline-flex items-center space-x-2 bg-black dark:bg-white text-white dark:text-black px-8 py-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-200 transition-all group">
               <span>Shop Collection</span>
@@ -178,7 +178,7 @@ const Home = () => {
             className="hidden md:block relative"
           >
             <img
-              src="https://picsum.photos/seed/fashion-hero/800/1000"
+              src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?q=80&w=1200&auto=format&fit=crop"
               alt="Hero"
               className="rounded-3xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700"
               referrerPolicy="no-referrer"
