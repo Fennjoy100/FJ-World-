@@ -641,29 +641,39 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
 
   const handlePlaceOrder = async () => {
-    const res = await fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      },
-      body: JSON.stringify({
-        items: cart,
-        totalPrice,
-        paymentMethod
-      })
-    });
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          items: cart,
+          totalPrice,
+          paymentMethod
+        })
+      });
 
-    if (res.ok) {
-      clearCart();
-      alert('Order placed successfully!');
-      if (user) {
-        navigate('/profile');
+      if (res.ok) {
+        clearCart();
+        alert('Order placed successfully!');
+        if (user) {
+          navigate('/profile');
+        } else {
+          navigate('/');
+        }
       } else {
-        navigate('/');
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          alert(`Failed to place order: ${data.error || res.statusText}`);
+        } catch (e) {
+          alert(`Failed to place order: ${res.status} ${res.statusText}\n${text}`);
+        }
       }
-    } else {
-      alert('Failed to place order');
+    } catch (error: any) {
+      alert(`Network error: ${error.message}`);
     }
   };
 
