@@ -151,7 +151,10 @@ const fallbackProducts = [
   { id: 1, name: "Headphones", description: "Bespoke sound engineering with premium leather finishes.", price: 299.99, image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 50, rating: 4.9 },
   { id: 2, name: "Smart Watch", description: "Elegant design meets cutting-edge health tracking.", price: 349.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 30, rating: 4.8 },
   { id: 3, name: "T shirt", description: "Premium cotton blend for everyday comfort and style.", price: 29.99, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop", category_id: 2, category_name: "Fashion", stock: 20, rating: 4.9 },
-  { id: 4, name: "dumbbells", description: "Professional-grade adjustable dumbbells for your home gym.", price: 199.99, image: "https://images.unsplash.com/photo-1586401100295-7a8096fd231a?q=80&w=1000&auto=format&fit=crop", category_id: 3, category_name: "gym", stock: 15, rating: 4.7 }
+  { id: 4, name: "dumbbells", description: "Professional-grade adjustable dumbbells for your home gym.", price: 199.99, image: "https://images.unsplash.com/photo-1586401100295-7a8096fd231a?q=80&w=1000&auto=format&fit=crop", category_id: 3, category_name: "gym", stock: 15, rating: 4.7 },
+  { id: 5, name: "Watermelon", description: "Fresh, sweet, and juicy watermelon.", price: 5.99, image: "https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?q=80&w=1000&auto=format&fit=crop", category_id: 4, category_name: "food", stock: 40, rating: 4.5 },
+  { id: 6, name: "Pizza", description: "Delicious wood-fired pizza with fresh ingredients.", price: 14.99, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop", category_id: 4, category_name: "food", stock: 25, rating: 4.8 },
+  { id: 7, name: "Dark Chocolate", description: "Rich, premium 85% dark chocolate bar.", price: 4.99, image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?q=80&w=1000&auto=format&fit=crop", category_id: 4, category_name: "food", stock: 60, rating: 4.9 }
 ];
 
 const fetchWithFallback = async (url: string, fallbackData: any) => {
