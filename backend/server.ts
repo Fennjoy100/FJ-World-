@@ -167,6 +167,21 @@ const authenticate = (req: any, res: any, next: any) => {
   }
 };
 
+const optionalAuthenticate = (req: any, res: any, next: any) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    req.user = null;
+    return next();
+  }
+  try {
+    req.user = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch (e) {
+    req.user = null;
+    next();
+  }
+};
+
 // API Routes
 app.post("/api/auth/register", (req, res) => {
   const { name, email, password } = req.body;
@@ -208,9 +223,9 @@ app.get("/api/categories", (req, res) => {
   res.json(categories);
 });
 
-app.post("/api/orders", authenticate, (req: any, res) => {
+app.post("/api/orders", optionalAuthenticate, (req: any, res) => {
   const { items, totalPrice, paymentMethod } = req.body;
-  const userId = req.user.id;
+  const userId = req.user ? req.user.id : null;
 
   const transaction = db.transaction(() => {
     const result = db.prepare("INSERT INTO orders (user_id, total_price, payment_method) VALUES (?, ?, ?)").run(userId, totalPrice, paymentMethod);

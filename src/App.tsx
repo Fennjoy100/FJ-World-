@@ -641,13 +641,11 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
 
   const handlePlaceOrder = async () => {
-    if (!user) return navigate('/login');
-
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       },
       body: JSON.stringify({
         items: cart,
@@ -659,7 +657,11 @@ const Checkout = () => {
     if (res.ok) {
       clearCart();
       alert('Order placed successfully!');
-      navigate('/profile');
+      if (user) {
+        navigate('/profile');
+      } else {
+        navigate('/');
+      }
     } else {
       alert('Failed to place order');
     }
