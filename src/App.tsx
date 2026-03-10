@@ -142,7 +142,7 @@ const Footer = () => (
 // --- Fallback Data for Vercel Deployment ---
 const fallbackCategories = [
   { id: 1, name: "Electronics", image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1000&auto=format&fit=crop" },
-  { id: 2, name: "Fashion", image: "https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=1000&auto=format&fit=crop" },
+  { id: 2, name: "Fashion", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1000&auto=format&fit=crop" },
   { id: 3, name: "gym", image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1000&auto=format&fit=crop" },
   { id: 4, name: "food", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop" }
 ];
@@ -150,7 +150,7 @@ const fallbackCategories = [
 const fallbackProducts = [
   { id: 1, name: "Headphones", description: "Bespoke sound engineering with premium leather finishes.", price: 299.99, image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 50, rating: 4.9 },
   { id: 2, name: "Smart Watch", description: "Elegant design meets cutting-edge health tracking.", price: 349.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 30, rating: 4.8 },
-  { id: 3, name: "T shirt", description: "Premium cotton blend for everyday comfort and style.", price: 29.99, image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop", category_id: 2, category_name: "Fashion", stock: 20, rating: 4.9 },
+  { id: 3, name: "T shirt", description: "Premium cotton blend for everyday comfort and style.", price: 29.99, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop", category_id: 2, category_name: "Fashion", stock: 20, rating: 4.9 },
   { id: 4, name: "dumbbells", description: "Professional-grade adjustable dumbbells for your home gym.", price: 199.99, image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop", category_id: 3, category_name: "gym", stock: 15, rating: 4.7 }
 ];
 
