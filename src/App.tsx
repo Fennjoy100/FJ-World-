@@ -548,17 +548,33 @@ const Login = () => {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
     const body = isLogin ? { email, password } : { name, email, password };
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if (data.token) {
-      login(data.user, data.token);
-      navigate('/');
-    } else {
-      alert(data.error);
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      
+      if (!res.ok) {
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          alert(data.error || 'Authentication failed');
+        } catch (err) {
+          alert(`Server error: ${res.status} ${res.statusText}`);
+        }
+        return;
+      }
+
+      const data = await res.json();
+      if (data.token) {
+        login(data.user, data.token);
+        navigate('/');
+      } else {
+        alert(data.error || 'Authentication failed');
+      }
+    } catch (error: any) {
+      alert(`Network error: ${error.message}`);
     }
   };
 
@@ -609,7 +625,7 @@ const Login = () => {
         </form>
         <p className="mt-8 text-center text-gray-500 dark:text-gray-400 text-sm">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
-          <button onClick={() => setIsLogin(!isLogin)} className="text-black dark:text-white font-bold hover:underline">
+          <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-black dark:text-white font-bold hover:underline">
             {isLogin ? 'Sign Up' : 'Login'}
           </button>
         </p>

@@ -12,7 +12,8 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const db = new Database(path.join(__dirname, "..", "ecommerce.db"));
+const dbPath = process.env.VERCEL === "1" ? path.join("/tmp", "ecommerce.db") : path.join(__dirname, "..", "ecommerce.db");
+const db = new Database(dbPath);
 
 // Initialize Database
 db.exec(`
