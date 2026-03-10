@@ -139,6 +139,38 @@ const Footer = () => (
   </footer>
 );
 
+// --- Fallback Data for Vercel Deployment ---
+const fallbackCategories = [
+  { id: 1, name: "Electronics", image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1000&auto=format&fit=crop" },
+  { id: 2, name: "Fashion", image: "https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=1000&auto=format&fit=crop" },
+  { id: 3, name: "gym", image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1000&auto=format&fit=crop" },
+  { id: 4, name: "food", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop" }
+];
+
+const fallbackProducts = [
+  { id: 1, name: "Headphones", description: "Bespoke sound engineering with premium leather finishes.", price: 299.99, image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 50, rating: 4.9 },
+  { id: 2, name: "Smart Watch", description: "Elegant design meets cutting-edge health tracking.", price: 349.99, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop", category_id: 1, category_name: "Electronics", stock: 30, rating: 4.8 },
+  { id: 3, name: "T shirt", description: "Premium cotton blend for everyday comfort and style.", price: 29.99, image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop", category_id: 2, category_name: "Fashion", stock: 20, rating: 4.9 },
+  { id: 4, name: "dumbbells", description: "Professional-grade adjustable dumbbells for your home gym.", price: 199.99, image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop", category_id: 3, category_name: "gym", stock: 15, rating: 4.7 }
+];
+
+const fetchWithFallback = async (url: string, fallbackData: any) => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Network response was not ok');
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.warn('Failed to parse JSON, using fallback data for', url);
+      return fallbackData;
+    }
+  } catch (error) {
+    console.warn('Fetch failed, using fallback data for', url);
+    return fallbackData;
+  }
+};
+
 // --- Pages ---
 
 const Home = () => {
@@ -146,8 +178,8 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/categories').then(res => res.json()).then(setCategories);
-    fetch('/api/products').then(res => res.json()).then(data => setFeaturedProducts(data.slice(0, 4)));
+    fetchWithFallback('/api/categories', fallbackCategories).then(setCategories);
+    fetchWithFallback('/api/products', fallbackProducts).then((data: any[]) => setFeaturedProducts(data.slice(0, 4)));
   }, []);
 
   return (
@@ -292,8 +324,8 @@ const ProductList = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('/api/products').then(res => res.json()).then(setProducts);
-    fetch('/api/categories').then(res => res.json()).then(setCategories);
+    fetchWithFallback('/api/products', fallbackProducts).then(setProducts);
+    fetchWithFallback('/api/categories', fallbackCategories).then(setCategories);
   }, []);
 
   const filteredProducts = products.filter(p => {
@@ -348,7 +380,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch(`/api/products/${id}`).then(res => res.json()).then(setProduct);
+    fetchWithFallback(`/api/products/${id}`, fallbackProducts.find(p => p.id === Number(id)) || fallbackProducts[0]).then(setProduct);
   }, [id]);
 
   if (!product) return <div className="h-screen flex items-center justify-center">Loading...</div>;
